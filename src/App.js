@@ -2,9 +2,13 @@ import { Console } from "@woowacourse/mission-utils";
 import InputView from "./InputView";
 
 class App {
+  #date;
+  #menu;
+
   async run() {
     await this.intro();
     await this.getDate();
+    await this.getMenu();
   }
 
   async intro() {
@@ -12,9 +16,13 @@ class App {
   }
 
   async getDate() {
-    InputView.readDate().then((result) => {
-      console.log(result);
-    });
+    this.#date = await InputView.readDate();
+    Console.print(this.#date);
+  }
+
+  async getMenu() {
+    this.#menu = await InputView.readMenu();
+    Console.print(this.#menu);
   }
 }
 
