@@ -1,33 +1,15 @@
+// 1이상 31이하의 숫자
+// 공백을 입력했을 경우
+// 공백이 포함된 경우
+// 정수가 아닌 숫자인 경우
 import App from "../src/App.js";
-import { MissionUtils } from "@woowacourse/mission-utils";
 import { EOL as LINE_SEPARATOR } from "os";
-
-export const mockQuestions = (inputs) => {
-  MissionUtils.Console.readLineAsync = jest.fn();
-
-  MissionUtils.Console.readLineAsync.mockImplementation(() => {
-    const input = inputs.shift();
-
-    return Promise.resolve(input);
-  });
-};
-
-export const getLogSpy = () => {
-  const logSpy = jest.spyOn(MissionUtils.Console, "print");
-  logSpy.mockClear();
-
-  return logSpy;
-};
-
-export const getOutput = (logSpy) => {
-  return [...logSpy.mock.calls].join(LINE_SEPARATOR);
-};
-
-export const expectLogContains = (received, expectedLogs) => {
-  expectedLogs.forEach((log) => {
-    expect(received).toContain(log);
-  });
-};
+import {
+  mockQuestions,
+  getLogSpy,
+  getOutput,
+  expectLogContains,
+} from "./ApplicationTest.js";
 
 describe("기능 테스트", () => {
   test("모든 타이틀 출력", async () => {
@@ -69,14 +51,32 @@ describe("기능 테스트", () => {
   });
 });
 
-describe("예외 테스트", () => {
-  test("날짜 예외 테스트", async () => {
+describe("입력 예외 테스트", () => {
+  test("날짜 공백", async () => {
     // given
     const INVALID_DATE_MESSAGE =
       "[ERROR] 유효하지 않은 날짜입니다. 다시 입력해 주세요.";
     const INPUTS_TO_END = ["1", "해산물파스타-2"];
     const logSpy = getLogSpy();
-    mockQuestions(["a", ...INPUTS_TO_END]);
+    mockQuestions(["   123", ...INPUTS_TO_END]);
+
+    // when
+    const app = new App();
+    await app.run();
+
+    // then
+    expect(logSpy).toHaveBeenCalledWith(
+      expect.stringContaining(INVALID_DATE_MESSAGE)
+    );
+  });
+
+  test("날짜 공백", async () => {
+    // given
+    const INVALID_DATE_MESSAGE =
+      "[ERROR] 유효하지 않은 날짜입니다. 다시 입력해 주세요.";
+    const INPUTS_TO_END = ["1", "해산물파스타-2"];
+    const logSpy = getLogSpy();
+    mockQuestions(["   ", ...INPUTS_TO_END]);
 
     // when
     const app = new App();
