@@ -133,14 +133,16 @@ class App {
     return sale;
   }
 
-  findingMenu(menu, category) {
-    const saleArr = [];
-    const menuItem = menuArr.find((category) =>
-      category.items.some((item) => item.name === menu[0])
-    );
-    if (menuItem.category === category) {
-      saleArr.push(Number(menu[1]) * 2023);
-    }
+  findingMenu(menus, category) {
+    let saleArr = [];
+    const menuName = menus.map((e) => {
+      const menuItem = menuArr.find((category) =>
+        category.items.some((item) => item.name === e[0])
+      );
+      if (menuItem.category === category) {
+        saleArr.push(Number(e[1]) * 2023);
+      }
+    });
     return saleArr;
   }
 
@@ -158,10 +160,16 @@ class App {
     ];
     if (weekday.includes(+date)) {
       const menuName = menus.map((e) => {
-        saleArr = this.findingMenu(e, "디저트");
+        const menuItem = menuArr.find((category) =>
+          category.items.some((item) => item.name === e[0])
+        );
+        if (menuItem.category === "디저트") {
+          saleArr.push(Number(e[1]) * 2023);
+        }
       });
     }
-    return this.saleAddition(saleArr);
+    const sum = saleArr.reduce((acc, cur) => acc + cur, 0);
+    return sum;
   }
 
   checkWeekendSale(date) {
@@ -173,7 +181,8 @@ class App {
         saleArr = this.findingMenu(e, "메인");
       });
     }
-    return this.saleAddition(saleArr);
+    const sum = saleArr.reduce((acc, cur) => acc + cur, 0);
+    return sum;
   }
 
   checkSpecialSale(date) {
