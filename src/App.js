@@ -23,8 +23,10 @@ class App {
     this.checkPresent(this.#totalPrice);
     this.showPresent(this.#isPresent);
     this.#isDdaySale = this.checkDdaySale(this.#date);
-    this.showBenefits(this.#isDdaySale, this.#date);
     this.checkWeekdaySale(this.#date);
+    this.checkWeekendSale(this.#date);
+
+    this.showBenefits(this.#isDdaySale, this.#date);
   }
 
   async intro() {
@@ -95,7 +97,24 @@ class App {
           category.items.some((item) => item.name === e[0])
         );
         if (menuItem.category === "디저트") {
-          console.log(e[0]);
+          saleArr.push(Number(e[1]) * 2023);
+        }
+      });
+    }
+    const sum = saleArr.reduce((acc, cur) => acc + cur, 0);
+    return sum;
+  }
+
+  checkWeekendSale(date) {
+    const menus = this.handleMenu();
+    const saleArr = [];
+    const weekend = [1, 2, 8, 9, 15, 16, 22, 23, 29, 30];
+    if (weekend.includes(+date)) {
+      const menuName = menus.map((e) => {
+        const menuItem = menuArr.find((category) =>
+          category.items.some((item) => item.name === e[0])
+        );
+        if (menuItem.category === "메인") {
           saleArr.push(Number(e[1]) * 2023);
         }
       });
