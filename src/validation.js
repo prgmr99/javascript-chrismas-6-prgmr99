@@ -20,25 +20,26 @@ const isValidDate = (date) => {
 };
 
 const isValidMenu = (menus) => {
+  const menuCollect = [];
+  const menuSet = [...new Set(menuCollect)];
   const validMenu = menus.map((menu) => {
     const findMenu = menuArr.find((category) =>
       category.items.some((item) => item.name === menu[0])
     );
-    // 메뉴에 없는 메뉴일 경우
+    if (findMenu) {
+      menuCollect.push(menu[0]);
+    }
     if (!findMenu) {
       throw new Error("[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.");
     }
-    // 개수는 1이상의 숫자(정수)가 아닐 경우
-    if (!Number.isInteger(+menu[1])) {
-      throw new Error("[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.");
-    }
-    if (+menu[1] < 1) {
+    if (!Number.isInteger(+menu[1]) || +menu[1] < 1) {
       throw new Error("[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.");
     }
   });
-
+  if (menuCollect !== menuSet) {
+    throw new Error("[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.");
+  }
   // 메뉴형식이 예시와 다를 경우
-  // 중복된 메뉴를 입력을 했을 경우
 };
 
 export { isValidDate, isValidMenu };
