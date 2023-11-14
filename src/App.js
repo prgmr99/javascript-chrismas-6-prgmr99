@@ -66,6 +66,7 @@ class App {
       this.#menu = await InputView.readMenu();
       const menus = this.handleMenu(this.#menu);
       isValidMenu(menus, this.#menu);
+      noBeverageOnly(menus);
       Console.print(this.#menu);
     } catch (error) {
       Console.print(error.message);
@@ -88,6 +89,20 @@ class App {
       this.#isEvent = true;
     }
     return sum;
+  }
+
+  noBeverageOnly(menus) {
+    const isBeverageOrder = order.every((item) => {
+      const itemName = item[0];
+      const category = menuArr.find((category) =>
+        category.items.some((menuItem) => menuItem.name === itemName)
+      );
+      return category && category.category === "음료";
+    });
+
+    if (isBeverageOrder) {
+      throw new Error("[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.");
+    }
   }
 
   getTotalBenefit() {
@@ -131,24 +146,6 @@ class App {
       sale = 0;
     }
     return sale;
-  }
-
-  findingMenu(menus, category) {
-    let saleArr = [];
-    const menuName = menus.map((e) => {
-      const menuItem = menuArr.find((category) =>
-        category.items.some((item) => item.name === e[0])
-      );
-      if (menuItem.category === category) {
-        saleArr.push(Number(e[1]) * 2023);
-      }
-    });
-    return saleArr;
-  }
-
-  saleAddition(array) {
-    const sum = array.reduce((acc, cur) => acc + cur, 0);
-    return sum;
   }
 
   checkWeekdaySale(date) {
