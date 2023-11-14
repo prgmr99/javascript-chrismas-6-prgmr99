@@ -2,7 +2,7 @@ import { Console } from "@woowacourse/mission-utils";
 import InputView from "./InputView";
 import OutputView from "./OutputView";
 import menuArr from "./menu";
-import { isValidDate } from "./validation";
+import { isValidDate, isValidMenu } from "./validation";
 
 class App {
   #date;
@@ -61,8 +61,14 @@ class App {
   }
 
   async getMenu() {
-    this.#menu = await InputView.readMenu();
-    Console.print(this.#menu);
+    try {
+      this.#menu = await InputView.readMenu();
+      const menus = this.handleMenu(this.#menu);
+      isValidMenu(menus);
+      Console.print(this.#menu);
+    } catch (error) {
+      Console.print(error.message);
+    }
   }
 
   calculateTotalPrice(menu) {
