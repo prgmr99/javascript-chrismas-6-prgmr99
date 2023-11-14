@@ -63,6 +63,21 @@ const OutputView = {
     Console.print("<할인 후 예상 결제 금액>");
     Console.print(`${totalPrice - totalBenefits + 25000}원\n`);
   },
+
+  printBadge(totalBenefits) {
+    Console.print("<12월 이벤트 배지>");
+    let badge = "없음";
+    if (totalBenefits >= 5000) {
+      badge = "별";
+    }
+    if (totalBenefits >= 10000) {
+      badge = "트리";
+    }
+    if (totalBenefits >= 20000) {
+      badge = "산타";
+    }
+    Console.print(`${badge}`);
+  },
 };
 
 export default OutputView;

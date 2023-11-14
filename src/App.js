@@ -12,6 +12,7 @@ class App {
   #isDdaySale;
   #isWeekDay;
   #isWeekend;
+  #totalBenefit;
 
   async run() {
     await this.intro();
@@ -35,6 +36,8 @@ class App {
       this.#isPresent,
       this.#totalPrice
     );
+    this.#totalBenefit = this.getTotalBenefit();
+    this.showBadge(this.#totalBenefit);
   }
 
   async intro() {
@@ -63,6 +66,15 @@ class App {
     });
     const sum = priceArr.reduce((acc, cur) => acc + cur, 0);
     return sum;
+  }
+
+  getTotalBenefit() {
+    if (this.#isPresent) {
+      return (this.#totalBenefit =
+        this.#isDdaySale + this.#isWeekDay + this.#isWeekend + 25000);
+    }
+    return (this.#totalBenefit =
+      this.#isDdaySale + this.#isWeekDay + this.#isWeekend);
   }
 
   handleMenu() {
@@ -155,6 +167,10 @@ class App {
       isPresent,
       totalPrice
     );
+  }
+
+  showBadge(totalBenefits) {
+    OutputView.printBadge(totalBenefits);
   }
 }
 
