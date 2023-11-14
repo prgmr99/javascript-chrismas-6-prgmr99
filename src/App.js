@@ -9,6 +9,7 @@ class App {
   #menuSplit;
   #totalPrice;
   #isPresent;
+  #isDdaySale;
 
   async run() {
     await this.intro();
@@ -21,6 +22,9 @@ class App {
     this.showTotalPrice(this.#totalPrice);
     this.checkPresent(this.#totalPrice);
     this.showPresent(this.#isPresent);
+    this.#isDdaySale = this.checkDdaySale(this.#date);
+
+    this.showBenefits(this.#isDdaySale);
   }
 
   async intro() {
@@ -67,6 +71,19 @@ class App {
     return this.#isPresent;
   }
 
+  checkDdaySale(date) {
+    let sale = 1000;
+    if (date < 26) {
+      sale += (date - 1) * 100;
+    }
+    if (date > 25) {
+      sale = 0;
+    }
+    return sale;
+  }
+
+  checkWeekdaySale() {}
+
   showDate() {
     OutputView.printDate(this.#date);
   }
@@ -81,6 +98,10 @@ class App {
 
   showPresent(isPresent) {
     OutputView.printPresent(isPresent);
+  }
+
+  showBenefits(isDdaySale) {
+    OutputView.printBenefits(isDdaySale);
   }
 }
 
