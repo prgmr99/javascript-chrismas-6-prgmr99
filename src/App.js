@@ -1,13 +1,13 @@
 import { Console } from "@woowacourse/mission-utils";
-import InputView from "./InputView";
-import OutputView from "./OutputView";
-import menuArr from "./menu";
+import InputView from "./view/InputView";
+import OutputView from "./view/OutputView";
+import menuArr from "./utils/menu";
 import {
   isValidDate,
   isValidMenu,
   isBeverageOnly,
   isValidAmount,
-} from "./validation";
+} from "./utils/validation";
 
 class App {
   #date;
@@ -24,36 +24,26 @@ class App {
 
   async run() {
     this.#isEvent = false;
+
     this.intro();
-    await this.getDate();
-    await this.getMenu();
-    this.showDate();
-    this.showMenu();
+    await this.handleInput();
+    this.showDateAndMenu();
     this.#menuSplit = this.handleMenu();
     this.#totalPrice = this.calculateTotalPrice(this.#menuSplit);
     this.showTotalPrice(this.#totalPrice);
-    this.checkPresent(this.#totalPrice);
-    this.showPresent(this.#isPresent);
-    this.#isDdaySale = this.checkDdaySale(this.#date);
-    this.#isWeekDay = this.checkWeekdaySale(this.#date);
-    this.#isWeekend = this.checkWeekendSale(this.#date);
-    this.#isSpecialDay = this.checkSpecialSale(this.#date);
-
-    this.showBenefits(
-      this.#isDdaySale,
-      this.#isWeekDay,
-      this.#isWeekend,
-      this.#isPresent,
-      this.#isSpecialDay,
-      this.#totalPrice,
-      this.#isEvent
-    );
+    this.setBenefits();
+    this.showData();
     this.#totalBenefit = this.getTotalBenefit();
     this.showBadge(this.#totalBenefit);
   }
 
   intro() {
     Console.print("안녕하세요! 우테코 식당 12월 이벤트 플래너입니다.");
+  }
+
+  async handleInput() {
+    await this.getDate();
+    await this.getMenu();
   }
 
   async getDate() {
@@ -77,6 +67,15 @@ class App {
     } catch (error) {
       Console.print(error.message);
     }
+  }
+
+  setBenefits() {
+    this.checkPresent(this.#totalPrice);
+    this.showPresent(this.#isPresent);
+    this.#isDdaySale = this.checkDdaySale(this.#date);
+    this.#isWeekDay = this.checkWeekdaySale(this.#date);
+    this.#isWeekend = this.checkWeekendSale(this.#date);
+    this.#isSpecialDay = this.checkSpecialSale(this.#date);
   }
 
   calculateTotalPrice(menu) {
@@ -167,7 +166,12 @@ class App {
     const weekend = [1, 2, 8, 9, 15, 16, 22, 23, 29, 30];
     if (weekend.includes(+date)) {
       const menuName = menus.map((e) => {
-        saleArr = this.findingMenu(e, "메인");
+        const menuItem = menuArr.find((category) =>
+          category.items.some((item) => item.name === e[0])
+        );
+        if (menuItem.category === "메인") {
+          saleArr.push(Number(e[1]) * 2023);
+        }
       });
     }
     const sum = saleArr.reduce((acc, cur) => acc + cur, 0);
@@ -183,12 +187,29 @@ class App {
     return sum;
   }
 
+  showData() {
+    this.showBenefits(
+      this.#isDdaySale,
+      this.#isWeekDay,
+      this.#isWeekend,
+      this.#isPresent,
+      this.#isSpecialDay,
+      this.#totalPrice,
+      this.#isEvent
+    );
+  }
+
   showDate() {
     OutputView.printDate(this.#date);
   }
 
   showMenu() {
     OutputView.printMenu(this.#menu);
+  }
+
+  showDateAndMenu() {
+    this.showDate();
+    this.showMenu();
   }
 
   showTotalPrice(totalPrice) {
