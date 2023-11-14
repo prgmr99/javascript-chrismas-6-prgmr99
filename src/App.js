@@ -23,8 +23,8 @@ class App {
     this.checkPresent(this.#totalPrice);
     this.showPresent(this.#isPresent);
     this.#isDdaySale = this.checkDdaySale(this.#date);
-
-    this.showBenefits(this.#isDdaySale);
+    this.showBenefits(this.#isDdaySale, this.#date);
+    this.checkWeekdaySale(this.#date);
   }
 
   async intro() {
@@ -82,7 +82,27 @@ class App {
     return sale;
   }
 
-  checkWeekdaySale() {}
+  checkWeekdaySale(date) {
+    const menus = this.handleMenu();
+    const saleArr = [];
+    const weekday = [
+      3, 4, 5, 6, 7, 10, 11, 12, 13, 14, 17, 18, 19, 20, 21, 24, 25, 26, 27, 28,
+      31,
+    ];
+    if (weekday.includes(+date)) {
+      const menuName = menus.map((e) => {
+        const menuItem = menuArr.find((category) =>
+          category.items.some((item) => item.name === e[0])
+        );
+        if (menuItem.category === "디저트") {
+          console.log(e[0]);
+          saleArr.push(Number(e[1]) * 2023);
+        }
+      });
+    }
+    const sum = saleArr.reduce((acc, cur) => acc + cur, 0);
+    return sum;
+  }
 
   showDate() {
     OutputView.printDate(this.#date);
@@ -100,8 +120,8 @@ class App {
     OutputView.printPresent(isPresent);
   }
 
-  showBenefits(isDdaySale) {
-    OutputView.printBenefits(isDdaySale);
+  showBenefits(isDdaySale, date) {
+    OutputView.printBenefits(isDdaySale, date);
   }
 }
 
