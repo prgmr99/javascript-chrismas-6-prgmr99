@@ -12,6 +12,7 @@ class App {
   #isDdaySale;
   #isWeekDay;
   #isWeekend;
+  #isSpecialDay;
   #totalBenefit;
 
   async run() {
@@ -28,12 +29,14 @@ class App {
     this.#isDdaySale = this.checkDdaySale(this.#date);
     this.#isWeekDay = this.checkWeekdaySale(this.#date);
     this.#isWeekend = this.checkWeekendSale(this.#date);
+    this.#isSpecialDay = this.checkSpecialSale(this.#date);
 
     this.showBenefits(
       this.#isDdaySale,
       this.#isWeekDay,
       this.#isWeekend,
       this.#isPresent,
+      this.#isSpecialDay,
       this.#totalPrice
     );
     this.#totalBenefit = this.getTotalBenefit();
@@ -71,10 +74,17 @@ class App {
   getTotalBenefit() {
     if (this.#isPresent) {
       return (this.#totalBenefit =
-        this.#isDdaySale + this.#isWeekDay + this.#isWeekend + 25000);
+        this.#isDdaySale +
+        this.#isWeekDay +
+        this.#isWeekend +
+        this.#isSpecialDay +
+        25000);
     }
     return (this.#totalBenefit =
-      this.#isDdaySale + this.#isWeekDay + this.#isWeekend);
+      this.#isDdaySale +
+      this.#isWeekDay +
+      this.#isWeekend +
+      this.#isSpecialDay);
   }
 
   handleMenu() {
@@ -143,6 +153,15 @@ class App {
     return sum;
   }
 
+  checkSpecialSale(date) {
+    let sum = 0;
+    const specialDays = [3, 10, 17, 24, 25, 31];
+    if (specialDays.includes(+date)) {
+      sum = 1000;
+    }
+    return sum;
+  }
+
   showDate() {
     OutputView.printDate(this.#date);
   }
@@ -159,12 +178,20 @@ class App {
     OutputView.printPresent(isPresent);
   }
 
-  showBenefits(isDdaySale, isWeekday, isWeekend, isPresent, totalPrice) {
+  showBenefits(
+    isDdaySale,
+    isWeekday,
+    isWeekend,
+    isPresent,
+    isSpecialDay,
+    totalPrice
+  ) {
     OutputView.printBenefits(
       isDdaySale,
       isWeekday,
       isWeekend,
       isPresent,
+      isSpecialDay,
       totalPrice
     );
   }
