@@ -23,18 +23,22 @@ class App {
   #isEvent;
 
   async run() {
-    this.#isEvent = false;
+    try {
+      this.#isEvent = false;
 
-    this.intro();
-    await this.handleInput();
-    this.showDateAndMenu();
-    this.#menuSplit = this.handleMenu();
-    this.#totalPrice = this.calculateTotalPrice(this.#menuSplit);
-    this.showTotalPrice(this.#totalPrice);
-    this.setBenefits();
-    this.showData();
-    this.#totalBenefit = this.getTotalBenefit();
-    this.showBadge(this.#totalBenefit);
+      this.intro();
+      await this.handleInput();
+      this.showDateAndMenu();
+      this.#menuSplit = this.handleMenu();
+      this.#totalPrice = this.calculateTotalPrice(this.#menuSplit);
+      this.showTotalPrice(this.#totalPrice);
+      this.setBenefits();
+      this.showData();
+      this.#totalBenefit = this.getTotalBenefit();
+      this.showBadge(this.#totalBenefit);
+    } catch (error) {
+      Console.print(error.message);
+    }
   }
 
   intro() {
