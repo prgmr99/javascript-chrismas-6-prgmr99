@@ -40,7 +40,8 @@ class App {
       this.#isWeekend,
       this.#isPresent,
       this.#isSpecialDay,
-      this.#totalPrice
+      this.#totalPrice,
+      this.#isEvent
     );
     this.#totalBenefit = this.getTotalBenefit();
     this.showBadge(this.#totalBenefit);
@@ -132,43 +133,47 @@ class App {
     return sale;
   }
 
+  findingMenu(menu, category) {
+    const saleArr = [];
+    const menuItem = menuArr.find((category) =>
+      category.items.some((item) => item.name === menu[0])
+    );
+    if (menuItem.category === category) {
+      saleArr.push(Number(menu[1]) * 2023);
+    }
+    return saleArr;
+  }
+
+  saleAddition(array) {
+    const sum = array.reduce((acc, cur) => acc + cur, 0);
+    return sum;
+  }
+
   checkWeekdaySale(date) {
     const menus = this.handleMenu();
-    const saleArr = [];
+    let saleArr = [];
     const weekday = [
       3, 4, 5, 6, 7, 10, 11, 12, 13, 14, 17, 18, 19, 20, 21, 24, 25, 26, 27, 28,
       31,
     ];
     if (weekday.includes(+date)) {
       const menuName = menus.map((e) => {
-        const menuItem = menuArr.find((category) =>
-          category.items.some((item) => item.name === e[0])
-        );
-        if (menuItem.category === "디저트") {
-          saleArr.push(Number(e[1]) * 2023);
-        }
+        saleArr = this.findingMenu(e, "디저트");
       });
     }
-    const sum = saleArr.reduce((acc, cur) => acc + cur, 0);
-    return sum;
+    return this.saleAddition(saleArr);
   }
 
   checkWeekendSale(date) {
     const menus = this.handleMenu();
-    const saleArr = [];
+    let saleArr = [];
     const weekend = [1, 2, 8, 9, 15, 16, 22, 23, 29, 30];
     if (weekend.includes(+date)) {
       const menuName = menus.map((e) => {
-        const menuItem = menuArr.find((category) =>
-          category.items.some((item) => item.name === e[0])
-        );
-        if (menuItem.category === "메인") {
-          saleArr.push(Number(e[1]) * 2023);
-        }
+        saleArr = this.findingMenu(e, "메인");
       });
     }
-    const sum = saleArr.reduce((acc, cur) => acc + cur, 0);
-    return sum;
+    return this.saleAddition(saleArr);
   }
 
   checkSpecialSale(date) {
@@ -202,7 +207,8 @@ class App {
     isWeekend,
     isPresent,
     isSpecialDay,
-    totalPrice
+    totalPrice,
+    isEvent
   ) {
     OutputView.printBenefits(
       isDdaySale,
@@ -210,7 +216,8 @@ class App {
       isWeekend,
       isPresent,
       isSpecialDay,
-      totalPrice
+      totalPrice,
+      isEvent
     );
   }
 
