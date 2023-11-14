@@ -37,7 +37,7 @@ const isValidMenu = (menus, menuform) => {
     }
   });
   if (menuCollect !== menuSet) {
-    throw new Error("[ERROR] 중복된 주문이 존재합니다. 다시 입력해 주세요.");
+    throw new Error("[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.");
   }
   if (!menuform.includes("-")) {
     throw new Error("[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.");
@@ -45,14 +45,13 @@ const isValidMenu = (menus, menuform) => {
 };
 
 const isBeverageOnly = (menus) => {
-  const isBeverageOrder = order.every((item) => {
+  const isBeverageOrder = menus.every((item) => {
     const itemName = item[0];
     const category = menuArr.find((category) =>
       category.items.some((menuItem) => menuItem.name === itemName)
     );
     return category && category.category === "음료";
   });
-
   if (isBeverageOrder) {
     throw new Error("[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.");
   }

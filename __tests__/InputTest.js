@@ -107,7 +107,7 @@ describe("주문 입력 예외 테스트", () => {
   test("중복된 메뉴 주문 예외 테스트", async () => {
     // given
     const INVALID_ORDER_MESSAGE =
-      "[ERROR] 중복된 주문이 존재합니다. 다시 입력해 주세요.";
+      "[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.";
     const INPUTS_TO_END = ["해산물파스타-2"];
     const logSpy = getLogSpy();
     mockQuestions(["3", "해산물파스타-1", ...INPUTS_TO_END]);
@@ -126,9 +126,27 @@ describe("주문 입력 예외 테스트", () => {
     // given
     const INVALID_ORDER_MESSAGE =
       "[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.";
-    const INPUTS_TO_END = ["해산물파스타_2"];
+    const INPUTS_TO_END = ["해산물파스타-2"];
     const logSpy = getLogSpy();
     mockQuestions(["6", "1@아이스크림", ...INPUTS_TO_END]);
+
+    // when
+    const app = new App();
+    await app.run();
+
+    // then
+    expect(logSpy).toHaveBeenCalledWith(
+      expect.stringContaining(INVALID_ORDER_MESSAGE)
+    );
+  });
+
+  test("음료만 주문하는 경우 예외 테스트", async () => {
+    // given
+    const INVALID_ORDER_MESSAGE =
+      "[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.";
+    const INPUTS_TO_END = ["펩시콜라-2"];
+    const logSpy = getLogSpy();
+    mockQuestions(["16", "샴페인-1", ...INPUTS_TO_END]);
 
     // when
     const app = new App();
