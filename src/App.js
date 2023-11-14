@@ -2,6 +2,7 @@ import { Console } from "@woowacourse/mission-utils";
 import InputView from "./InputView";
 import OutputView from "./OutputView";
 import menuArr from "./menu";
+import { isValidDate } from "./validation";
 
 class App {
   #date;
@@ -14,15 +15,17 @@ class App {
   #isWeekend;
   #isSpecialDay;
   #totalBenefit;
+  #isEvent;
 
   async run() {
-    await this.intro();
+    this.#isEvent = false;
+    this.intro();
     await this.getDate();
     await this.getMenu();
     this.showDate();
     this.showMenu();
     this.#menuSplit = this.handleMenu();
-    this.#totalPrice = this.calculatePrice(this.#menuSplit);
+    this.#totalPrice = this.calculateTotalPrice(this.#menuSplit);
     this.showTotalPrice(this.#totalPrice);
     this.checkPresent(this.#totalPrice);
     this.showPresent(this.#isPresent);
@@ -43,13 +46,18 @@ class App {
     this.showBadge(this.#totalBenefit);
   }
 
-  async intro() {
+  intro() {
     Console.print("안녕하세요! 우테코 식당 12월 이벤트 플래너입니다.");
   }
 
   async getDate() {
-    this.#date = await InputView.readDate();
-    Console.print(this.#date);
+    try {
+      this.#date = await InputView.readDate();
+      isValidDate(this.#date);
+      Console.print(this.#date);
+    } catch (error) {
+      Console.print(error.message);
+    }
   }
 
   async getMenu() {
@@ -57,7 +65,7 @@ class App {
     Console.print(this.#menu);
   }
 
-  calculatePrice(menu) {
+  calculateTotalPrice(menu) {
     const priceArr = [];
     const menuName = menu.map((e) => {
       const foundItem = menuArr
@@ -68,6 +76,10 @@ class App {
       }
     });
     const sum = priceArr.reduce((acc, cur) => acc + cur, 0);
+
+    if (sum >= 10000) {
+      this.#isEvent = true;
+    }
     return sum;
   }
 
