@@ -19,7 +19,7 @@ const isValidDate = (date) => {
   }
 };
 
-const isValidMenu = (menus) => {
+const isValidMenu = (menus, menuform) => {
   const menuCollect = [];
   const menuSet = [...new Set(menuCollect)];
   const validMenu = menus.map((menu) => {
@@ -39,7 +39,9 @@ const isValidMenu = (menus) => {
   if (menuCollect !== menuSet) {
     throw new Error("[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.");
   }
-  // 메뉴형식이 예시와 다를 경우
+  if (!menuform.includes("-")) {
+    throw new Error("[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.");
+  }
 };
 
 export { isValidDate, isValidMenu };

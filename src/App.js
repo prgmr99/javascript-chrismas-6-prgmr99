@@ -64,7 +64,7 @@ class App {
     try {
       this.#menu = await InputView.readMenu();
       const menus = this.handleMenu(this.#menu);
-      isValidMenu(menus);
+      isValidMenu(menus, this.#menu);
       Console.print(this.#menu);
     } catch (error) {
       Console.print(error.message);
