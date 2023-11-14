@@ -10,6 +10,8 @@ class App {
   #totalPrice;
   #isPresent;
   #isDdaySale;
+  #isWeekDay;
+  #isWeekend;
 
   async run() {
     await this.intro();
@@ -23,10 +25,16 @@ class App {
     this.checkPresent(this.#totalPrice);
     this.showPresent(this.#isPresent);
     this.#isDdaySale = this.checkDdaySale(this.#date);
-    this.checkWeekdaySale(this.#date);
-    this.checkWeekendSale(this.#date);
+    this.#isWeekDay = this.checkWeekdaySale(this.#date);
+    this.#isWeekend = this.checkWeekendSale(this.#date);
 
-    this.showBenefits(this.#isDdaySale, this.#date);
+    this.showBenefits(
+      this.#isDdaySale,
+      this.#isWeekDay,
+      this.#isWeekend,
+      this.#isPresent,
+      this.#totalPrice
+    );
   }
 
   async intro() {
@@ -139,8 +147,14 @@ class App {
     OutputView.printPresent(isPresent);
   }
 
-  showBenefits(isDdaySale, date) {
-    OutputView.printBenefits(isDdaySale, date);
+  showBenefits(isDdaySale, isWeekday, isWeekend, isPresent, totalPrice) {
+    OutputView.printBenefits(
+      isDdaySale,
+      isWeekday,
+      isWeekend,
+      isPresent,
+      totalPrice
+    );
   }
 }
 

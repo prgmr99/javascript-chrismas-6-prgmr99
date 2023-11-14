@@ -29,13 +29,39 @@ const OutputView = {
     Console.print(`${message}`);
   },
 
-  printBenefits(isDdaySale, date) {
+  printBenefits(isDdaySale, isWeekday, isWeekend, isPresent, totalPrice) {
+    let totalBenefits = 0;
     Console.print("<혜택 내역>");
 
-    const weekend = [1, 2, 8, 9, 15, 16, 22, 23, 29, 30];
     if (isDdaySale > 0) {
+      totalBenefits += isDdaySale;
       Console.print(`크리스마스 디데이 할인: -${isDdaySale}원`);
     }
+    if (isWeekday > 0) {
+      totalBenefits += isWeekday;
+      Console.print(`평일 할인: -${isWeekday}원`);
+    }
+    if (isWeekend > 0) {
+      totalBenefits += isWeekend;
+      Console.print(`주말 할인: -${isWeekend}원`);
+    }
+    if (isPresent) {
+      totalBenefits += 25000;
+      Console.print("증정 이벤트: -25,000원");
+    } else if (
+      isDdaySale === 0 &&
+      isWeekday === 0 &&
+      isWeekend === 0 &&
+      !isPresent
+    ) {
+      Console.print("없음\n");
+    }
+
+    Console.print("<총혜택 금액>");
+    Console.print(`-${totalBenefits}원\n`);
+
+    Console.print("<할인 후 예상 결제 금액>");
+    Console.print(`${totalPrice - totalBenefits + 25000}원\n`);
   },
 };
 
