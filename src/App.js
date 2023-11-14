@@ -2,7 +2,12 @@ import { Console } from "@woowacourse/mission-utils";
 import InputView from "./InputView";
 import OutputView from "./OutputView";
 import menuArr from "./menu";
-import { isValidDate, isValidMenu } from "./validation";
+import {
+  isValidDate,
+  isValidMenu,
+  isBeverageOnly,
+  isValidAmount,
+} from "./validation";
 
 class App {
   #date;
@@ -66,7 +71,8 @@ class App {
       this.#menu = await InputView.readMenu();
       const menus = this.handleMenu(this.#menu);
       isValidMenu(menus, this.#menu);
-      noBeverageOnly(menus);
+      isBeverageOnly(menus);
+      isValidAmount(menus);
       Console.print(this.#menu);
     } catch (error) {
       Console.print(error.message);
@@ -89,20 +95,6 @@ class App {
       this.#isEvent = true;
     }
     return sum;
-  }
-
-  noBeverageOnly(menus) {
-    const isBeverageOrder = order.every((item) => {
-      const itemName = item[0];
-      const category = menuArr.find((category) =>
-        category.items.some((menuItem) => menuItem.name === itemName)
-      );
-      return category && category.category === "음료";
-    });
-
-    if (isBeverageOrder) {
-      throw new Error("[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.");
-    }
   }
 
   getTotalBenefit() {

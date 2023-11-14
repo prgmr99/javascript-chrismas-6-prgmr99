@@ -44,4 +44,29 @@ const isValidMenu = (menus, menuform) => {
   }
 };
 
-export { isValidDate, isValidMenu };
+const isBeverageOnly = (menus) => {
+  const isBeverageOrder = order.every((item) => {
+    const itemName = item[0];
+    const category = menuArr.find((category) =>
+      category.items.some((menuItem) => menuItem.name === itemName)
+    );
+    return category && category.category === "음료";
+  });
+
+  if (isBeverageOrder) {
+    throw new Error("[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.");
+  }
+};
+
+const isValidAmount = (menus) => {
+  const totalAmount = menus.reduce(
+    (total, item) => total + parseInt(item[1], 10),
+    0
+  );
+
+  if (totalAmount > 20) {
+    throw new Error("[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.");
+  }
+};
+
+export { isValidDate, isValidMenu, isBeverageOnly, isValidAmount };
