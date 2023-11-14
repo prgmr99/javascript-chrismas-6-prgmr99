@@ -30,7 +30,6 @@ const isValidMenu = (menus, menuform) => {
       menuCollect.push(menu[0]);
     }
     if (!findMenu) {
-      console.log("이거 띄워야하는데?");
       throw new Error("[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.");
     }
     if (!Number.isInteger(+menu[1]) || +menu[1] < 1) {
@@ -38,7 +37,7 @@ const isValidMenu = (menus, menuform) => {
     }
   });
   if (menuCollect !== menuSet) {
-    throw new Error("[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.");
+    throw new Error("[ERROR] 중복된 주문이 존재합니다. 다시 입력해 주세요.");
   }
   if (!menuform.includes("-")) {
     throw new Error("[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.");

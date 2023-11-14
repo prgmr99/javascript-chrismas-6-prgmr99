@@ -103,4 +103,22 @@ describe("날짜 입력 예외 테스트", () => {
       expect.stringContaining(INVALID_ORDER_MESSAGE)
     );
   });
+
+  test("중복된 메뉴 주문 예외 테스트", async () => {
+    // given
+    const INVALID_ORDER_MESSAGE =
+      "[ERROR] 중복된 주문이 존재합니다. 다시 입력해 주세요.";
+    const INPUTS_TO_END = ["해산물파스타-2"];
+    const logSpy = getLogSpy();
+    mockQuestions(["3", "해산물파스타-1", ...INPUTS_TO_END]);
+
+    // when
+    const app = new App();
+    await app.run();
+
+    // then
+    expect(logSpy).toHaveBeenCalledWith(
+      expect.stringContaining(INVALID_ORDER_MESSAGE)
+    );
+  });
 });
