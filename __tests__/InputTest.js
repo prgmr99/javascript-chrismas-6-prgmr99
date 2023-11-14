@@ -52,7 +52,7 @@ describe("기능 테스트", () => {
 });
 
 describe("입력 예외 테스트", () => {
-  test("날짜 공백", async () => {
+  test("날짜 공백 포함", async () => {
     // given
     const INVALID_DATE_MESSAGE =
       "[ERROR] 유효하지 않은 날짜입니다. 다시 입력해 주세요.";
@@ -77,6 +77,42 @@ describe("입력 예외 테스트", () => {
     const INPUTS_TO_END = ["1", "해산물파스타-2"];
     const logSpy = getLogSpy();
     mockQuestions(["   ", ...INPUTS_TO_END]);
+
+    // when
+    const app = new App();
+    await app.run();
+
+    // then
+    expect(logSpy).toHaveBeenCalledWith(
+      expect.stringContaining(INVALID_DATE_MESSAGE)
+    );
+  });
+
+  test("날짜 정수가 아닌 숫자(소수)", async () => {
+    // given
+    const INVALID_DATE_MESSAGE =
+      "[ERROR] 유효하지 않은 날짜입니다. 다시 입력해 주세요.";
+    const INPUTS_TO_END = ["1", "해산물파스타-2"];
+    const logSpy = getLogSpy();
+    mockQuestions(["1.234", ...INPUTS_TO_END]);
+
+    // when
+    const app = new App();
+    await app.run();
+
+    // then
+    expect(logSpy).toHaveBeenCalledWith(
+      expect.stringContaining(INVALID_DATE_MESSAGE)
+    );
+  });
+
+  test("날짜 정수가 아닌 숫자(음수)", async () => {
+    // given
+    const INVALID_DATE_MESSAGE =
+      "[ERROR] 유효하지 않은 날짜입니다. 다시 입력해 주세요.";
+    const INPUTS_TO_END = ["1", "해산물파스타-2"];
+    const logSpy = getLogSpy();
+    mockQuestions(["-7", ...INPUTS_TO_END]);
 
     // when
     const app = new App();

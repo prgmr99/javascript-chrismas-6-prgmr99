@@ -14,7 +14,7 @@ const isValidDate = (date) => {
   if (date.trim() === "") {
     throw new Error("[ERROR] 유효하지 않은 날짜입니다. 다시 입력해 주세요.");
   }
-  if (!Number.isInteger(dateNumber) && dateNumber > 0) {
+  if (!Number.isInteger(dateNumber) || dateNumber < 0) {
     throw new Error("[ERROR] 유효하지 않은 날짜입니다. 다시 입력해 주세요.");
   }
 };
